@@ -7,6 +7,7 @@ import os
 import time
 import shutil
 from subprocess import Popen
+import multiprocessing
 
 from utils import Config
 
@@ -24,14 +25,14 @@ if not os.path.exists(Config.tmp_dir): os.makedirs(Config.tmp_dir)
 files_in_pdf_dir = os.listdir(pdf_dir)
 pdf_files = [x for x in files_in_pdf_dir if x.endswith('.pdf')] # filter to just pdfs, just in case
 
-# iterate over all pdf files and create the thumbnails
-for i,p in enumerate(pdf_files):
+def gen_thumb(x):
+  i, p = x
   pdf_path = os.path.join(pdf_dir, p)
   thumb_path = os.path.join(Config.thumbs_dir, p + '.jpg')
 
   if os.path.isfile(thumb_path): 
     print("skipping %s, thumbnail already exists." % (pdf_path, ))
-    continue
+    return
 
   print("%d/%d processing %s" % (i, len(pdf_files), p))
 
@@ -84,3 +85,12 @@ for i,p in enumerate(pdf_files):
     os.system(cmd)
 
   time.sleep(0.01) # silly way for allowing for ctrl+c termination
+
+def main():
+  # iterate over all pdf files and create the thumbnails
+  pools = multiprocessing.Pool(5)
+  pools.map(gen_thumb,
+          zip(range(len(pdf_files)),pdf_files))
+
+if __name__ == '__main__':
+  main()
