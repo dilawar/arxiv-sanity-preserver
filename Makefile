@@ -1,4 +1,5 @@
 PYTHON:=$(shell which python3)
+PYTHON=./venv/bin/python
 
 all : buildsvm thumb cache
 
@@ -14,11 +15,13 @@ analyze : ./analyze.py parse_pdf
 thumb : ./thumb_pdf.py fetch
 	$(PYTHON) $<
 
-fetch : ./fetch_papers.py
+fetch : ./fetch_papers.py ./fetch_papers_biorxiv.py
 	$(PYTHON) $<
+	$(PYTHON) ./fetch_papers_biorxiv.py
 
 make_pdf : ./download_pdfs.py fetch
 	$(PYTHON) $<
+	$(PYTHON) ./download_pdfs_bioarxive.py
 
 parse_pdf : ./parse_pdf_to_text.py make_pdf
 	$(PYTHON) $<
