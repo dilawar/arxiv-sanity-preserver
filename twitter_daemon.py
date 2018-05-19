@@ -1,3 +1,4 @@
+#!./venv/bin/python 
 """
 Periodically checks Twitter for tweets about arxiv papers we recognize
 and logs the tweets into mongodb database "arxiv", under "tweets" collection.
