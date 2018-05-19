@@ -26,3 +26,6 @@ download : ./download_pdfs.py fetch
 
 parse_pdf : ./parse_pdf_to_text.py 
 	$(PYTHON) $<
+
+serve : ./serve.py
+	$(PYTHON) $< --prod &

@@ -12,4 +12,5 @@ if pgrep twitter_daemon; then
     echo 'Twitter daemon already runnung';
 else
     ./twitter_daemon.py &
+    ./twitter_daemon_biorxiv.py &
 fi
